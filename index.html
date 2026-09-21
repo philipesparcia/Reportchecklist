@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Report Checklist</title>
+<style>
+:root {
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --text: #14181f;
+  --muted: #667085;
+  --line: #e2e6ea;
+  --accent: #0f766e;
+  --accent-ink: #ffffff;
+  --ok-bg: #e6f5ee;
+  --ok-line: #b7e0cb;
+  --danger: #b42318;
+  --track: #dde3e8;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap { max-width: 560px; margin: 0 auto; padding: 0 16px 40px; }
+
+.top {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  background: var(--bg);
+  padding: 16px 0 12px;
+  border-bottom: 1px solid var(--line);
+}
+h1 { font-size: 22px; margin: 0 0 12px; letter-spacing: -0.01em; }
+.datebar { display: flex; gap: 8px; align-items: stretch; }
+.datebar input[type="date"] {
+  flex: 1; min-width: 0;
+  height: 48px; padding: 0 12px;
+  font: inherit; font-weight: 600;
+  color: var(--text); background: var(--card);
+  border: 1px solid var(--line); border-radius: 12px;
+  text-align: center;
+}
+button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.icon {
+  width: 48px; height: 48px; flex: none;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--card); font-size: 24px; line-height: 1;
+}
+.sub { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; color: var(--muted); font-size: 14px; }
+.link { background: none; border: 0; color: var(--accent); font-weight: 600; padding: 6px 0 6px 12px; }
+.progress { height: 8px; background: var(--track); border-radius: 99px; overflow: hidden; margin-top: 10px; }
+.progress > div { height: 100%; width: 0; background: var(--accent); border-radius: 99px; transition: width .25s ease; }
+.count { margin-top: 8px; font-weight: 600; }
+.count span { color: var(--muted); font-weight: 400; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; }
+.add { margin-top: 16px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.add textarea {
+  width: 100%; resize: none;
+  font: inherit; color: var(--text); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 12px; min-height: 48px;
+}
+.add textarea:focus, .datebar input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.add .row { display: flex; align-items: center; gap: 10px; }
+.hint { flex: 1; font-size: 13px; color: var(--muted); }
+.primary {
+  height: 44px; padding: 0 22px; border: 0; border-radius: 10px;
+  background: var(--accent); color: var(--accent-ink); font-weight: 700;
+}
+.primary:active { opacity: .85; }
+.msg { font-size: 13px; color: var(--muted); min-height: 0; }
+.msg:empty { display: none; }
+
+.seg { display: flex; gap: 6px; margin: 16px 0 10px; }
+.seg button {
+  flex: 1; height: 40px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--card); color: var(--muted); font-weight: 600; font-size: 14px;
+}
+.seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+li.item {
+  display: flex; align-items: center;
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  min-height: 60px;
+}
+li.item.done { background: var(--ok-bg); border-color: var(--ok-line); }
+li.item label { flex: 1; min-width: 0; display: flex; align-items: center; gap: 14px; padding: 12px 8px 12px 14px; cursor: pointer; }
+li.item input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 28px; height: 28px; flex: none; margin: 0;
+  border: 2px solid var(--muted); border-radius: 8px; background: transparent;
+  display: grid; place-content: center;
+}
+li.item input[type="checkbox"]:checked { background: var(--accent); border-color: var(--accent); }
+li.item input[type="checkbox"]:checked::after {
+  content: ""; width: 7px; height: 13px;
+  border: solid var(--accent-ink); border-width: 0 3px 3px 0;
+  transform: translateY(-1px) rotate(45deg);
+}
+li.item input[type="checkbox"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.name { font-size: 17px; font-weight: 500; overflow-wrap: anywhere; }
+.tag { display: block; font-size: 12px; color: var(--muted); font-weight: 400; }
+li.item.done .tag { color: var(--accent); font-weight: 600; }
+.del {
+  flex: none; min-width: 48px; height: 48px; margin-right: 6px;
+  background: none; border: 0; border-radius: 10px;
+  color: var(--muted); font-size: 22px; line-height: 1;
+}
+.del.armed { color: var(--danger); font-size: 14px; font-weight: 700; padding: 0 10px; }
+.empty { text-align: center; color: var(--muted); padding: 28px 12px; }
+.status { margin-top: 20px; text-align: center; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Report checklist</h1>
+    <div class="datebar">
+      <button class="icon" id="prev" aria-label="Previous day">&#8249;</button>
+      <input type="date" id="date" aria-label="Report date">
+      <button class="icon" id="next" aria-label="Next day">&#8250;</button>
+    </div>
+    <div class="sub"><span id="dateLabel"></span><button class="link" id="today">Today</button></div>
+    <div class="progress"><div id="bar"></div></div>
+    <div class="count" id="count"></div>
+  </header>
+
+  <section class="card add">
+    <textarea id="newNames" rows="2" placeholder="Add names (one per line or separated by commas)" autocomplete="off" autocapitalize="words"></textarea>
+    <div class="row">
+      <span class="hint">Add as many as you need.</span>
+      <button class="primary" id="addBtn">Add</button>
+    </div>
+    <div class="msg" id="msg"></div>
+  </section>
+
+  <div class="seg" id="seg">
+    <button data-f="all" aria-pressed="true">All</button>
+    <button data-f="pending" aria-pressed="false">Not yet</button>
+    <button data-f="passed" aria-pressed="false">Passed</button>
+  </div>
+
+  <ul id="list"></ul>
+  <div class="empty" id="empty" hidden></div>
+  <div class="status" id="status"></div>
+</div>
+
+<script>
+(function () {
+  var LS_KEY = 'report-checklist-v1';
+  var state = { names: [], done: {} };   // names: [{id,name}], done: {"YYYY-MM-DD": {id: true}}
+  var date = todayStr();
+  var filter = 'all';
+  var armedId = null, armedTimer = null;
+
+
+  var $ = function (id) { return document.getElementById(id); };
+  var els = {
+    date: $('date'), label: $('dateLabel'), bar: $('bar'), count: $('count'),
+    input: $('newNames'), msg: $('msg'), list: $('list'), empty: $('empty'), status: $('status'), seg: $('seg')
+  };
+
+  /* ---------- helpers ---------- */
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function fmt(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function todayStr() { return fmt(new Date()); }
+  function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function shift(s, n) { var d = parse(s); d.setDate(d.getDate() + n); return fmt(d); }
+  function uid() { return Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4); }
+  function valid(s) {
+    return s && Array.isArray(s.names) && s.done && typeof s.done === 'object' &&
+      s.names.every(function (n) { return n && typeof n.id === 'string' && typeof n.name === 'string'; });
+  }
+  function isDone(id) { return !!(state.done[date] && state.done[date][id]); }
+
+  /* ---------- storage ---------- */
+  function loadLocal() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if (raw) { var s = JSON.parse(raw); if (valid(s)) state = s; }
+    } catch (e) {}
+  }
+  function cacheLocal() {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(state)); return true; } catch (e) { return false; }
+  }
+  function setStatus(t) { els.status.textContent = t; }
+
+  function changed() {
+    setStatus(cacheLocal() ? 'Saved on this device' : 'Could not save on this device (private browsing?)');
+  }
+
+  /* ---------- actions ---------- */
+  function say(t) { els.msg.textContent = t || ''; }
+
+  function addNames() {
+    var parts = els.input.value.split(/[\n,;]+/).map(function (s) { return s.trim().replace(/\s+/g, ' '); }).filter(Boolean);
+    if (!parts.length) { say('Type a name first.'); return; }
+    var have = {};
+    state.names.forEach(function (n) { have[n.name.toLowerCase()] = true; });
+    var added = 0, skipped = 0;
+    parts.forEach(function (p) {
+      var k = p.toLowerCase();
+      if (have[k]) { skipped++; return; }
+      have[k] = true;
+      state.names.push({ id: uid(), name: p });
+      added++;
+    });
+    els.input.value = '';
+    say((added ? 'Added ' + added + (added === 1 ? ' name' : ' names') + '.' : '') +
+        (skipped ? (added ? ' ' : '') + skipped + ' already in the list.' : ''));
+    if (added) changed();
+    render();
+    if (!('ontouchstart' in window)) els.input.focus();
+  }
+
+  function toggle(id, on) {
+    if (!state.done[date]) state.done[date] = {};
+    if (on) state.done[date][id] = true; else delete state.done[date][id];
+    if (!Object.keys(state.done[date]).length) delete state.done[date];
+    changed();
+    render();
+  }
+
+  function removeName(id) {
+    state.names = state.names.filter(function (n) { return n.id !== id; });
+    Object.keys(state.done).forEach(function (d) {
+      delete state.done[d][id];
+      if (!Object.keys(state.done[d]).length) delete state.done[d];
+    });
+    armedId = null;
+    changed();
+    render();
+  }
+
+  function setDate(s) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return;
+    date = s; armedId = null; render();
+  }
+
+  /* ---------- render ---------- */
+  function render() {
+    els.date.value = date;
+    els.label.textContent = parse(date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+    var total = state.names.length;
+    var passed = state.names.filter(function (n) { return isDone(n.id); }).length;
+    els.bar.style.width = total ? Math.round(passed / total * 100) + '%' : '0%';
+    els.count.innerHTML = '';
+    els.count.appendChild(document.createTextNode(passed + ' of ' + total + ' passed '));
+    var rest = document.createElement('span');
+    rest.textContent = total ? '· ' + (total - passed) + ' to go' : '';
+    els.count.appendChild(rest);
+
+    var items = state.names.slice().sort(function (a, b) { return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }); })
+      .filter(function (n) {
+        var d = isDone(n.id);
+        return filter === 'all' || (filter === 'passed' ? d : !d);
+      });
+
+    els.list.innerHTML = '';
+    items.forEach(function (n) {
+      var d = isDone(n.id);
+      var li = document.createElement('li');
+      li.className = 'item' + (d ? ' done' : '');
+
+      var label = document.createElement('label');
+      var cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.checked = d;
+      cb.setAttribute('aria-label', n.name + ' — report passed');
+      cb.addEventListener('change', function () { toggle(n.id, cb.checked); });
+      var text = document.createElement('span');
+      text.className = 'name';
+      text.textContent = n.name;
+      var tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = d ? 'Report passed' : 'Not yet';
+      text.appendChild(tag);
+      label.appendChild(cb); label.appendChild(text);
+
+      var del = document.createElement('button');
+      var armed = armedId === n.id;
+      del.className = 'del' + (armed ? ' armed' : '');
+      del.textContent = armed ? 'Remove?' : '×';
+      del.setAttribute('aria-label', armed ? 'Confirm remove ' + n.name : 'Remove ' + n.name);
+      del.addEventListener('click', function () {
+        if (armedId === n.id) { clearTimeout(armedTimer); removeName(n.id); return; }
+        armedId = n.id; render();
+        clearTimeout(armedTimer);
+        armedTimer = setTimeout(function () { armedId = null; render(); }, 3000);
+      });
+
+      li.appendChild(label); li.appendChild(del);
+      els.list.appendChild(li);
+    });
+
+    if (!items.length) {
+      els.empty.hidden = false;
+      els.empty.textContent = !total ? 'No names yet. Add your first names above.'
+        : filter === 'passed' ? 'Nobody has passed yet for this date.'
+        : 'Everyone has passed. All done!';
+    } else {
+      els.empty.hidden = true;
+    }
+
+    Array.prototype.forEach.call(els.seg.querySelectorAll('button'), function (b) {
+      b.setAttribute('aria-pressed', b.dataset.f === filter ? 'true' : 'false');
+    });
+  }
+
+  /* ---------- events ---------- */
+  $('prev').addEventListener('click', function () { setDate(shift(date, -1)); });
+  $('next').addEventListener('click', function () { setDate(shift(date, 1)); });
+  $('today').addEventListener('click', function () { setDate(todayStr()); });
+  els.date.addEventListener('change', function () { if (els.date.value) setDate(els.date.value); });
+  $('addBtn').addEventListener('click', addNames);
+  els.input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey && window.matchMedia('(pointer: fine)').matches) {
+      e.preventDefault(); addNames();
+    }
+  });
+  els.input.addEventListener('input', function () { say(''); });
+  els.seg.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-f]');
+    if (!b) return;
+    filter = b.dataset.f; render();
+  });
+
+  loadLocal();
+  render();
+  setStatus('Saved on this device');
+})();
+</script>
+</body>
+</html>
